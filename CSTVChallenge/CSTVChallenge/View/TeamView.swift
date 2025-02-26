@@ -10,44 +10,37 @@ import SwiftUI
 struct TeamView: View {
     
     @Binding var team: Team
+    private let screenWidth = UIScreen.main.bounds.size.width
     
     var body: some View {
         
-        let placeholderCircle = Circle().fill(.plahceholderGray)
+        let placeholderCircle = Circle()
+            .fill(.placeholderGray)
+            .frame(width: 60, height: 60)
         
         VStack(spacing: 10) {
             
-            if let url = team.logo {
-                AsyncImage(url: URL(string: url),
-                           transaction: Transaction(animation: .easeInOut(duration: 0.3))) { phase in
-                    switch phase {
-                    case .empty:
-                        placeholderCircle
-                            .blinking()
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    default:
-                        placeholderCircle
-                    }
-                }
+            if let url = team.logo, url != "" {
+                AsyncImageWithPlaceholder(url: url, placeholder: placeholderCircle, size: (60, 60))
             } else {
                 placeholderCircle
             }
             
             Text(team.name)
                 .font(.roboto(10))
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
+                .truncationMode(.tail)
+                .lineLimit(1)
+                .frame(maxWidth: 0.355 * screenWidth)
+            
         }
         .background(Color.clear)
-        .frame(maxWidth: 60)
     }
     
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    @Previewable @State var team = Team(logo: nil, id:"1", name: "Team 1")
+    @Previewable @State var team = Team(logo: nil, id:"1", name: "Team 1 Team Team Team Team Team Team Team Team Team Team Team Team Team")
     TeamView(team: $team)
         .background(Color.blue)
 }

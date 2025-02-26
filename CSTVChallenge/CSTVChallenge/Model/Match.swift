@@ -10,37 +10,44 @@ import Foundation
 struct Match: Decodable {
     
     let id: String
-    let teams: [Team]
-    var started: Bool = false
+    var teams: [Team]
+    var status: MatchStatus
     var startTime: Date? = nil
-    let serieObj: Serie
-    let leagueObj: League
-    
-    var league: String {
-        leagueObj.name
-    }
-    
-    var serie: String {
-        serieObj.name
-    }
+    let serie: Serie
+    let league: League
     
     enum CodingKeys: String, CodingKey {
         case teams = "opponents"
         case startTime = "startTime"
-        case id, serieObj, leagueObj
+        case id, serie, league, status
     }
     
-    struct League: Decodable {
-        let name: String
-    }
+}
+
+// Declared outside of object for easier testing
+struct League: Decodable {
+    let name: String
+    let image: String?
     
-    struct Serie: Decodable {
-        let name: String
+    enum CodingKeys: String, CodingKey {
+        case name
+        case image = "image_url"
     }
-    
+}
+
+struct Serie: Decodable {
+    let name: String
 }
 
 enum MatchStatus: String, Decodable {
     case running
     case notStarted
+    case notPlayed
+    case finished
+    
+    enum CodingKeys: String, CodingKey {
+        case notStarted = "not_started"
+        case notPlayed = "not_played"
+        case finished, running
+    }
 }

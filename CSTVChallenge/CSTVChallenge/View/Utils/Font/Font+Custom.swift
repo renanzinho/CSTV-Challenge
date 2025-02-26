@@ -13,6 +13,6 @@ extension Font {
     }
     
     public enum RobotoDesign: String {
-        case regular, medium
+        case regular, medium, bold
     }
 }
